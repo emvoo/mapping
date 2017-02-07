@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Mapping</string>
+    <string name="choosemap">Choose Map</string>
+    <string name="regularview">Regular View</string>
+    <string name="cyclemapview">Cycle Map</string>
+    <string name="setlocation">Set Location</string>
+    <string name="latitude">Latitude: </string>
+    <string name="longitude">Longitude: </string>
 </resources>

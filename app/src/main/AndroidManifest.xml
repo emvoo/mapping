@@ -18,6 +18,13 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-
+    <activity
+        android:name=".MapChooseActivity"
+        android:label="@string/choosemap">
+    </activity>
+    <activity
+        android:name=".MapSetLocation"
+        android:label="@string/setlocation">
+    </activity>
     </application>
 </manifest>
