@@ -2,9 +2,10 @@ package mapping.marcin.wisniewski.com.mapping;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.renderscript.Double2;
 import android.util.Log;
 import android.view.MenuInflater;
 
@@ -12,21 +13,50 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.OverlayItem;
 
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import static android.R.attr.value;
+import static android.content.ContentValues.TAG;
 
 
 public class HelloMap extends Activity
 {
 
     MapView mv;
+    ItemizedIconOverlay<OverlayItem> items;
+
+    class MyOverlayGestureListener implements ItemizedIconOverlay.OnItemGestureListener<OverlayItem>
+    {
+        public boolean onItemLongPress(int i, OverlayItem item)
+        {
+            Toast.makeText(HelloMap.this, "LONG PRESS: " + item.getSnippet(), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        public boolean onItemSingleTapUp(int i, OverlayItem item)
+        {
+            Toast.makeText(HelloMap.this, "TAP: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+    }
+
+    MyOverlayGestureListener markerGestureListener;
 
     public void onCreate(Bundle savedInstanceState)
     {
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -40,7 +70,42 @@ public class HelloMap extends Activity
 
         mv.setBuiltInZoomControls(true);
         mv.getController().setZoom(14);
-        mv.getController().setCenter(new GeoPoint(40.01,22.5));
+        mv.getController().setCenter(new GeoPoint(50.7968, -1.50));
+
+        markerGestureListener = new MyOverlayGestureListener();
+
+        items = new ItemizedIconOverlay<OverlayItem>(this, new ArrayList<OverlayItem>(), markerGestureListener);
+        OverlayItem fernhurst = new OverlayItem("Fernhurst", "Village in West Sussex", new GeoPoint(51.05, -0.72));
+        OverlayItem blackdown = new OverlayItem("Blackdown", "Highest point in West Sussex", new GeoPoint(51.0581, -0.6897));
+        fernhurst.setMarker(getResources().getDrawable(R.drawable.marker));
+        items.addItem(fernhurst);
+        items.addItem(blackdown);
+        try
+        {
+            FileReader fr = new FileReader(Environment.getExternalStorageDirectory().getAbsolutePath() + "/poi.txt");
+            BufferedReader reader = new BufferedReader(fr);
+            String line = "";
+            while((line = reader.readLine()) != null)
+            {
+                String[] bitz = line.split(",");
+                OverlayItem item = new OverlayItem(bitz[0].trim(), bitz[1].trim(), bitz[2].trim(), new GeoPoint(Double.parseDouble(bitz[4].trim()), Double.parseDouble(bitz[3].trim())));
+                if(bitz[1].equals("pub"))
+                {
+                    item.setMarker(getResources().getDrawable(R.drawable.pub));
+                }
+                else if(bitz[1].equals("restaurant"))
+                {
+                    item.setMarker(getResources().getDrawable(R.drawable.rest));
+                }
+                items.addItem(item);
+            }
+            mv.getOverlays().add(items);
+            reader.close();
+        }
+        catch(IOException e)
+        {
+            new AlertDialog.Builder(this).setMessage("ERROR: " + e).show();
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu)
@@ -98,4 +163,7 @@ public class HelloMap extends Activity
             }
         }
     }
+
+
+
 }
