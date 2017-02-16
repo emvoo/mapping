@@ -6,4 +6,5 @@
     <string name="setlocation">Set Location</string>
     <string name="latitude">Latitude: </string>
     <string name="longitude">Longitude: </string>
+    <string name="maptypelist">Choose Map Style (List)</string>
 </resources>

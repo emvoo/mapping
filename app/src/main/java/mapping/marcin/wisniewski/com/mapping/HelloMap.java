@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuInflater;
 
 import org.osmdroid.config.Configuration;
@@ -24,11 +23,7 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-import static android.R.attr.value;
-import static android.content.ContentValues.TAG;
 
 
 public class HelloMap extends Activity
@@ -56,8 +51,6 @@ public class HelloMap extends Activity
 
     public void onCreate(Bundle savedInstanceState)
     {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -130,6 +123,12 @@ public class HelloMap extends Activity
             startActivityForResult(intent, 1);
             return true;
         }
+        if(item.getItemId() == R.id.maptypelist)
+        {
+            Intent intent = new Intent(this, ChooseMapType.class);
+            startActivityForResult(intent, 0);
+            return true;
+        }
         return false;
     }
 
@@ -140,14 +139,14 @@ public class HelloMap extends Activity
             if(resultCode == RESULT_OK)
             {
                 Bundle extras = intent.getExtras();
-                boolean cyclemap = extras.getBoolean("mapping.marcin.wisniewski.com.mapping.cyclemap");
+                boolean cyclemap = extras.getBoolean("chosenmap");
                 if(cyclemap==true)
                 {
                     mv.setTileSource(TileSourceFactory.CYCLEMAP);
                 }
                 else
                 {
-                    mv.getTileProvider().setTileSource(TileSourceFactory.MAPNIK);
+                    mv.setTileSource(TileSourceFactory.MAPNIK);
                 }
             }
 

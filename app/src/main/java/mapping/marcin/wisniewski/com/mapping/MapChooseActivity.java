@@ -17,7 +17,6 @@ public class MapChooseActivity extends Activity implements View.OnClickListener 
         regular.setOnClickListener(this);
         Button cyclemap = (Button)findViewById(R.id.btnCyclemap);
         cyclemap.setOnClickListener(this);
-
     }
 
     public void onClick(View v)
@@ -29,7 +28,7 @@ public class MapChooseActivity extends Activity implements View.OnClickListener 
         {
             cyclemap=true;
         }
-        bundle.putBoolean("mapping.marcin.wisniewski.com.mapping.cyclemap", cyclemap);
+        bundle.putBoolean("chosenmap", cyclemap);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();

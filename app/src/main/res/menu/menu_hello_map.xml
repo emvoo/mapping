@@ -8,4 +8,8 @@
         android:id="@+id/setlocation"
         android:title="@string/setlocation"
         />
+    <item
+        android:id="@+id/maptypelist"
+        android:title="@string/maptypelist"
+        />
 </menu>

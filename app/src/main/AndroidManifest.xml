@@ -26,5 +26,9 @@
         android:name=".MapSetLocation"
         android:label="@string/setlocation">
     </activity>
+    <activity
+        android:name=".ChooseMapType"
+        android:label="@string/maptypelist">
+    </activity>
     </application>
 </manifest>
